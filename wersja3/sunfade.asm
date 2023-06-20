@@ -42,6 +42,7 @@ nextpixel:
     imul edx, edx
     add eax, edx                ; eax - current distance^2 = delta x^2 + delta y^2
     mov ebx, [ebp + 20]         ; ebx - distance^2
+    xor edx, edx
 
     test eax, eax
     je  centre
@@ -54,12 +55,14 @@ nextpixel:
     mov dh, [ecx]
     sub dl, dh
     mov dh, 0x0                 ; ebx - color difference
+
     imul eax, edx               ; now in eax color_diff * current_dist^2
     xor edx, edx
     div ebx                      ; result in eax
     mov edx, 0xFF
     sub edx, eax
     mov byte [ecx], dl
+    xor edx, edx
 
 ; second byte of a pixel
     mov eax, [ebp - 4]          
@@ -75,6 +78,7 @@ nextpixel:
     mov edx, 0xFF
     sub edx, eax
     mov byte [ecx+1], dl
+    xor edx, edx
     
 
 ; third byte of a pixel
@@ -91,6 +95,7 @@ nextpixel:
     mov edx, 0xFF
     sub edx, eax
     mov byte [ecx+2], dl
+    xor edx, edx
     add ecx, 3
 
     cmp esi, [ebp + 12]
