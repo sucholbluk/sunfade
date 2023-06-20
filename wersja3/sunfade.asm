@@ -20,7 +20,6 @@ sunfade:
 
 init:
     mov eax, [ebp + 12]
-    ; xor esi, esi                ; current x starting with 0, in first pixel will be inc to 1
     xor edi, edi                ; current y starting with 0, in first pixel will be inc to 1
     mov edx, [ebp + 20]
     imul edx, edx
@@ -62,7 +61,6 @@ nextpixel:
     mov edx, 0xFF
     sub edx, eax
     mov byte [ecx], dl
-    xor edx, edx
 
 ; second byte of a pixel
     mov eax, [ebp - 4]          
@@ -78,9 +76,7 @@ nextpixel:
     mov edx, 0xFF
     sub edx, eax
     mov byte [ecx+1], dl
-    xor edx, edx
     
-
 ; third byte of a pixel
     mov eax, [ebp - 4]                ; eax - current distance^2
     mov ebx, [ebp + 20]
@@ -89,13 +85,14 @@ nextpixel:
     mov dh, [ecx+2]
     sub dl, dh
     mov dh, 0x0                 ; ebx - color difference
+
     imul eax, edx               ; now in eax color_diff * current_dist^2
     xor edx, edx
     div ebx                      ; result in eax
+
     mov edx, 0xFF
     sub edx, eax
     mov byte [ecx+2], dl
-    xor edx, edx
     add ecx, 3
 
     cmp esi, [ebp + 12]
