@@ -42,15 +42,14 @@ int main(int argc, char* argv[]) {
 
     int width = header.width;
     int height = header.height;
-    unsigned int offset = header.offset;
 
     int bpp = header.bits_per_pixel;
 
-    printf("bpp: %d \nwidth: %d \nheight: %d\noffset: %i\n",
-    bpp, width, height, offset);
+    printf("bpp: %d \nwidth: %d \nheight: %d\n",
+    bpp, width, height);
     void *img = malloc(header.image_size);
 
-    fseek(file, offset, SEEK_SET);
+    fseek(file, header.offset, SEEK_SET);
     fread(img, header.image_size, 1, file);
     fclose(file);
 
