@@ -4,6 +4,7 @@ global sunfade
 sunfade:
     push ebp
     mov ebp, esp
+    sub esp, 4              ;will be stored current distance^2
 
     ; Save the function arguments
     push ebx
@@ -19,8 +20,8 @@ sunfade:
 
 init:
     mov eax, [ebp + 12]
-    mov esi, 0x0                ; current x starting with 0, in first pixel will be inc to 1
-    mov edi, 0x0                ; current y starting with 0, in first pixel will be inc to 1
+    ; xor esi, esi                ; current x starting with 0, in first pixel will be inc to 1
+    xor edi, edi                ; current y starting with 0, in first pixel will be inc to 1
     mov edx, [ebp + 20]
     imul edx, edx
     mov [ebp + 20], edx         ; now [ebp + 20] dist^2
@@ -29,7 +30,7 @@ nextrow:
     cmp edi, [ebp + 16]
     je  fin
     inc edi
-    mov esi, 0x0
+    xor esi, esi                ; setting x to 0
 
 nextpixel:
     inc esi
@@ -39,14 +40,15 @@ nextpixel:
     mov edx, [ebp + 28]
     sub edx, edi
     imul edx, edx
-    add eax, edx                ; eax - current distance^2 = delta x^2 + delta y^2 
-    mov ebx, [ebp + 20]
-    ; imul edx, edx               ; edx - distance^2
+    add eax, edx                ; eax - current distance^2 = delta x^2 + delta y^2
+    mov ebx, [ebp + 20]         ; ebx - distance^2
 
-    cmp eax, 0
+    test eax, eax
     je  centre
     cmp eax, ebx
     jge  skipcoloring
+    
+    mov [ebp - 4], eax          ; save current distance^2
 
     mov dl, 0xFF
     mov dh, [ecx]
@@ -60,13 +62,7 @@ nextpixel:
     mov byte [ecx], dl
 
 ; second byte of a pixel
-    mov eax, [ebp + 24]
-    sub eax, esi
-    imul eax, eax
-    mov edx, [ebp + 28]
-    sub edx, edi
-    imul edx, edx
-    add eax, edx                ; eax - current distance^2
+    mov eax, [ebp - 4]          
     mov ebx, [ebp + 20]
 
     mov dl, 0xFF
@@ -82,13 +78,7 @@ nextpixel:
     
 
 ; third byte of a pixel
-    mov eax, [ebp + 24]
-    sub eax, esi
-    imul eax, eax
-    mov edx, [ebp + 28]
-    sub edx, edi
-    imul edx, edx
-    add eax, edx                ; eax - current distance^2
+    mov eax, [ebp - 4]                ; eax - current distance^2
     mov ebx, [ebp + 20]
 
     mov dl, 0xFF
@@ -135,6 +125,7 @@ fin:
     pop edi
     pop esi
     pop ebx
-    mov esp, ebp
+    ; mov esp, ebp
+    add esp, 4
     pop ebp
     ret
