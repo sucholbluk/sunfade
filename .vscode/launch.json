@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "console": "externalTerminal",
-      "cwd": "d:/ARKO/x86 Projekt",
-      "program": "d:/ARKO/x86 Projekt/build/Debug/outDebug"
+      "cwd": "c:/Users/sucho/OneDrive/Pulpit/ARKO PROJEKT/arko-projekt",
+      "program": "c:/Users/sucho/OneDrive/Pulpit/ARKO PROJEKT/arko-projekt/build/Debug/outDebug"
     }
   ]
 }

@@ -13,7 +13,7 @@ sunfade:
     mov ecx, [ebp + 8]      ; img
                             ;[ebp + 12]   ; width
                             ;[ebp + 16]   ; height
-                            ;[ebp + 20]   ; dist
+                            ;[ebp + 20]   ; dist, later dist^2
                             ;[ebp + 24]   ; x
                             ;[ebp + 28]   ; y
 
@@ -21,6 +21,9 @@ init:
     mov eax, [ebp + 12]
     mov esi, 0x0                ; current x starting with 0, in first pixel will be inc to 1
     mov edi, 0x0                ; current y starting with 0, in first pixel will be inc to 1
+    mov edx, [ebp + 20]
+    imul edx, edx
+    mov [ebp + 20], edx         ; now [ebp + 20] dist^2
 
 nextrow:
     cmp edi, [ebp + 16]
@@ -38,7 +41,7 @@ nextpixel:
     imul edx, edx
     add eax, edx                ; eax - current distance^2 = delta x^2 + delta y^2 
     mov edx, [ebp + 20]
-    imul edx, edx               ; edx - distance^2
+    ; imul edx, edx               ; edx - distance^2
 
     cmp eax, 0
     je  centre
@@ -52,7 +55,7 @@ nextpixel:
     mov bh, 0x0
 
     imul eax, ebx               ; now in eax color_diff * current_dist^2
-    mov bx, dx                  ; now in bx - distance^2
+    mov ebx, edx                  ; now in bx - distance^2
     xor edx, edx
     div ebx                      ; result in eax
     mov edx, 0xFF
@@ -68,7 +71,6 @@ nextpixel:
     imul edx, edx
     add eax, edx                ; eax - current distance^2
     mov edx, [ebp + 20]
-    imul edx, edx
 
     xor ebx, ebx
     mov bl, 0xFF
@@ -76,7 +78,7 @@ nextpixel:
     sub bl, bh
     mov bh, 0x0                 ; ebx - color difference
     imul eax, ebx               ; now in eax color_diff * current_dist^2
-    mov bx, dx                  ; now in bx - distance^2
+    mov ebx, edx                  ; now in bx - distance^2
     xor edx, edx
     div ebx                      ; result in eax
     mov edx, 0xFF
@@ -93,7 +95,6 @@ nextpixel:
     imul edx, edx
     add eax, edx                ; eax - current distance^2
     mov edx, [ebp + 20]
-    imul edx, edx
 
     xor ebx, ebx
     mov bl, 0xFF
@@ -101,7 +102,7 @@ nextpixel:
     sub bl, bh
     mov bh, 0x0                 ; ebx - color difference
     imul eax, ebx               ; now in eax color_diff * current_dist^2
-    mov bx, dx                  ; now in bx - distance^2
+    mov ebx, edx                  ; now in bx - distance^2
     xor edx, edx
     div ebx                      ; result in eax
     mov edx, 0xFF
