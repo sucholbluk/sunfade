@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 #pragma pack(push, 1)
@@ -55,7 +56,7 @@ int main(int argc, char* argv[]) {
     int img_width;
     int img_height;
     int bbp; // bits per pixel
-    char *new_filename;
+    char new_filename[128] = {0};
     int params[3]; // [x, y, range]
     int x;
     int y;
@@ -72,9 +73,8 @@ int main(int argc, char* argv[]) {
         params[0] = atoi(argv[2]);
         params[1] = atoi(argv[3]);
         params[2] = atoi(argv[4]);
-        new_filename = argv[5];
+        strncpy(new_filename, argv[5], sizeof(new_filename) - 1);
         interactive = 0;
-        printf("here");
     }
 
     FILE *file = fopen(file_path, "rb");
