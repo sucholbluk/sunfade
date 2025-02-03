@@ -1,3 +1,4 @@
+[![leak-check](https://github.com/sucholbluk/sunfade/actions/workflows/leak-check.yml/badge.svg)](https://github.com/sucholbluk/sunfade/actions/workflows/leak-check.yml)
 # Sunfade
 This projects implements a **sunfade** effect on BMP images - linear interpolation between original pixel values and completely white pixel. It's a simple program written in C/Asm(x86). The C part handles: reading from file, processing BMPHeader, prompting the user for parameters and writing to file. The assembly part implements operations on pixels.
 
