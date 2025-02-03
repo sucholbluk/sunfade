@@ -1,6 +1,8 @@
 CC=gcc
 ASMBIN=nasm
 
+EXE_FILE=sfade
+
 all : asm cc link
 
 asm :
@@ -8,8 +10,8 @@ asm :
 cc :
 	$(CC) -m32 -c -g -O0 sfade.c
 link :
-	$(CC) -m32 -g -o sufade sunfade.o sfade.o
+	$(CC) -m32 -g -o $(EXE_FILE) sunfade.o sfade.o
 
 clean :
 	rm *.o
-	rm sufade
+	rm $(EXE_FILE)
