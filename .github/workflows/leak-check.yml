@@ -1,0 +1,30 @@
+name: leak-check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Add architecture
+      run: sudo dpkg --add-architecture i386
+
+    - name: Update package list
+      run: sudo apt-get update
+
+    - name: Install dependencies
+      run: sudo apt-get install -y build-essential valgrind nasm gcc-multilib libc6-dev-i386 libc6-dbg:i386
+
+    - name: Build with Make
+      run: make -C src
+
+    - name: Run Valgrind
+      run: valgrind --leak-check=full ./src/sfade ./example_images/rx7fc.bmp 0 0 1500 bleble.bmp
