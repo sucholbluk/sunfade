@@ -14,7 +14,7 @@ sunfade:
     mov ecx, [ebp + 8]      ; img
                             ;[ebp + 12]   ; width
                             ;[ebp + 16]   ; height
-                            ;[ebp + 20]   ; dist, later dist^2
+                            ;[ebp + 20]   ; range, later range^2
                             ;[ebp + 24]   ; x
                             ;[ebp + 28]   ; y
 
@@ -23,7 +23,7 @@ init:
     xor edi, edi                ; current y starting with 0, in first pixel will be inc to 1
     mov edx, [ebp + 20]
     imul edx, edx
-    mov [ebp + 20], edx         ; now [ebp + 20] dist^2
+    mov [ebp + 20], edx         ; now [ebp + 20] range^2
 
 nextrow:
     cmp edi, [ebp + 16]
